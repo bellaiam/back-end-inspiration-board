@@ -4,7 +4,7 @@ class Card(db.Model):
     card_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     message = db.Column(db.String)
     likes_count = db.Column(db.Integer)
-    day_created =db.Columt(db.DateTime, nullable=True)
+    day_created = db.Column(db.DateTime, nullable=True)
 
 def to_dict(self):
     return {
