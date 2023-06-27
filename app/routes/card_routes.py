@@ -13,8 +13,8 @@ card_bp = Blueprint("card_bp",  __name__, url_prefix="/cards")
 @card_bp.route("", methods=["POST"])
 def create_new_card():
     request_body = request.get_json()
-    if not "message" in request_body:
-        return make_response({"details": "Invalid data"}, 400)
+    if "message" not in request_body:
+        return ({"details": "Invalid data"}, 400)
     new_card = Card.from_dict(request_body)
 
     db.session.add(new_card)

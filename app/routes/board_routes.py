@@ -11,8 +11,8 @@ board_bp = Blueprint("board_bp",  __name__, url_prefix="/boards")
 @board_bp.route("", methods=["POST"])
 def create_one_board():
     request_body = request.get_json()
-    if not "title" in request_body:
-        return make_response({"details": "Invalid data"}, 400)
+    if "title" not in request_body:
+        return ({"details": "Invalid data"}, 400)
     new_board = Board.from_dict(request_body)
 
     db.session.add(new_board)
