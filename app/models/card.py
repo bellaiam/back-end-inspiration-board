@@ -6,6 +6,8 @@ class Card(db.Model):
     likes_count = db.Column(db.Integer)
     day_created = db.Column(db.DateTime, nullable=True)
 
+    boards = db.relationship("Board", back_populates="card", lazy=True)
+
     def to_dict(self):
         return {
             "card_id": self.card_id,

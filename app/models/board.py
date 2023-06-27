@@ -4,6 +4,10 @@ class Board(db.Model):
     title = db.Column(db.String)
     owner = db.Column(db.String)
 
+    card_id = db.Column(db.Integer, db.ForeignKey('card.card_id'), nullable=True)
+    card = db.relationship("Card", back_populates="boards")
+
+
     def to_dict(self):
         return {
             "board_id": self.board_id,
