@@ -68,11 +68,11 @@ def update_board(board_id):
 
 @board_bp.route("/<board_id>", methods=["DELETE"])
 def delete_one_task(board_id):
-    task = validate_item(Board, board_id)
+    board = validate_item(Board, board_id)
     
-    db.session.delete(task)
+    db.session.delete(board)
     db.session.commit()
-    return make_response({"details": f"Task {task.task_id} \"{task.title}\" successfully deleted"}, 200)
+    return make_response({"details": f"Task {board.board_id} \"{board.title}\" successfully deleted"}, 200)
 
 def validate_item(model, item_id):
     try:
