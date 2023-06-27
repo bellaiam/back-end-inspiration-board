@@ -82,3 +82,29 @@ def validate_item(model, item_id):
     
     return model.query.get_or_404(item_id, description=f"{model.__name__} with id {item_id} not found")
 
+#NESTED ROUTES
+@board_bp.route("/<board_id>/cards", methods= ["POST"])
+def post_cards_under_board(board_id):
+    board = validate_item(Board, board_id)
+
+    request_body = request.get_json()
+    try:
+        new_cards_for_board = request_body["card_ids"]
+        cards = []
+        for card_id in new_cards_for_board:
+            cards.append(validate_item(Card, card_id))
+
+        board.cards = cards
+        db.session.commit()
+
+        return {"board_id": board.board_id, "card_ids": new_cards_for_board}, 200
+    except:
+        return abort(make_response({"details": "Invalid data"}, 400))
+
+
+@board_bp.route("/<board_id>/cards", methods = ["GET"])
+def get_cards_of_one_board(board_id):
+    board = validate_item(Board, board_id)
+
+    cards_to_dict = [card.to_dict() for card in board.cards]
+    return jsonify(id=board.board_id, title=board.title, owner=board.owner, cards=cards_to_dict), 200

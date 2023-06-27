@@ -11,12 +11,16 @@ class Card(db.Model):
 
 
     def to_dict(self):
-        return {
+        card_dict = {
             "card_id": self.card_id,
             "message": self.message,
             "likes_count": self.likes_count,
             "day_created": self.day_created
         }
+        if self.board_id:
+            card_dict["board_id"] = self.board_id
+        return card_dict
+
 
     @classmethod
     def from_dict(cls, card_data):
