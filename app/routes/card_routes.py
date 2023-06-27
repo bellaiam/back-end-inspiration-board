@@ -65,4 +65,4 @@ def delete_card(card_id):
     db.session.commit()
     return {"details": f'Card {card_id} successfully deleted'}, 200
 
-#still to do: test all routes in postman 
+#still to do: test all routes in postman //
