@@ -72,7 +72,7 @@ def delete_one_task(board_id):
     
     db.session.delete(board)
     db.session.commit()
-    return make_response({"details": f"Task {board.board_id} \"{board.title}\" successfully deleted"}, 200)
+    return make_response({"details": f"Board {board.board_id} \"{board.title}\" successfully deleted"}, 200)
 
 def validate_item(model, item_id):
     try:

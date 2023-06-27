@@ -11,7 +11,7 @@ class Card(db.Model):
             "card_id": self.card_id,
             "message": self.message,
             "likes_count": self.likes_count,
-            "day_created": self.data_created
+            "day_created": self.day_created
         }
 
     @classmethod
