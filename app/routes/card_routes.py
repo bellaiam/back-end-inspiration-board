@@ -11,7 +11,7 @@ card_bp = Blueprint("card_bp",  __name__, url_prefix="/cards")
 
 
 @card_bp.route("", methods=["POST"])
-def create_one_board():
+def create_new_card():
     request_body = request.get_json()
     if not "message" in request_body:
         return make_response({"details": "Invalid data"}, 400)
@@ -23,7 +23,7 @@ def create_one_board():
     return make_response({"card": new_card.to_dict()}, 201)
 
 @card_bp.route("", methods=["GET"])
-def get_boards():
+def get_cards():
 
     sort_direction_likes = request.args.get("sort", default="desc")
     if sort_direction_likes == "asc":
@@ -40,9 +40,29 @@ def get_boards():
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200
 
+@card_bp.route("<card_id>", methods=["GET"])
+def get_card_by_id(card_id):
+    card = validate_item(Card, card_id)
+    return {"card": card.to_dict()}, 200
 
-@card_bp.route("", methods=["DELETE"])
-def get_one_card(card_id):
+@card_bp.route("<card_id>", methods=["PUT"])
+def update_card(card_id):
+    card = validate_item(Card, card_id)
+    request_body = request.get_json()
+    if not "message" in request_body:
+        return make_response({"details": "Invalid data"}, 400)
+    card = Card.from_dict(request_body)
+
+    db.session.commit()
+    return {"card": card.to_dict()}, 200
+
+
+@card_bp.route("<card_id>", methods=["DELETE"])
+def delete_card(card_id):
 
     card = validate_item(Card, card_id)
-    return make_response({"card": card.to_dict()}, 200)
+    db.session.delete(card)
+    db.session.commit()
+    return {"details": f'Task {card_id} "{card.title}" successfully deleted'}, 200
+
+#still to do: test all routes in postman 

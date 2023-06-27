@@ -55,6 +55,17 @@ def update_task(board_id):
 
     return make_response({"board": board.to_dict()}, 200)
 
+@board_bp.route("<board_id>", methods=["PUT"])
+def update_board(board_id):
+    board = validate_item(Board, board_id)
+    request_body = request.get_json()
+    if not "message" in request_body:
+        return make_response({"details": "Invalid data"}, 400)
+    board = Board.from_dict(request_body)
+
+    db.session.commit()
+    return {"board": board.to_dict()}, 200
+
 @board_bp.route("/<board_id>", methods=["DELETE"])
 def delete_one_task(board_id):
     task = validate_item(Board, board_id)
