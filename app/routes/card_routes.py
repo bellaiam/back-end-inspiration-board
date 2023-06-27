@@ -63,6 +63,6 @@ def delete_card(card_id):
     card = validate_item(Card, card_id)
     db.session.delete(card)
     db.session.commit()
-    return {"details": f'Card {card_id} "{card.title}" successfully deleted'}, 200
+    return {"details": f'Card {card_id} successfully deleted'}, 200
 
 #still to do: test all routes in postman 
