@@ -60,7 +60,7 @@ def update_card(card_id):
     return make_response({"card": card.to_dict()}, 200)
 
 
-@card_bp.route("<card_id>", methods=["DELETE"])
+@card_bp.route("/<card_id>", methods=["DELETE"])
 def delete_card(card_id):
 
     card = validate_item(Card, card_id)
