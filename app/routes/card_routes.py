@@ -40,18 +40,21 @@ def get_cards():
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200
 
-@card_bp.route("<card_id>", methods=["GET"])
+@card_bp.route("/<card_id>", methods=["GET"])
 def get_card_by_id(card_id):
     card = validate_item(Card, card_id)
     return {"card": card.to_dict()}, 200
 
-@card_bp.route("<card_id>", methods=["PUT"])
+@card_bp.route("/<card_id>", methods=["PUT"])
 def update_card(card_id):
     card = validate_item(Card, card_id)
     request_body = request.get_json()
     if not "message" in request_body:
         return make_response({"details": "Invalid data"}, 400)
-    card = Card.from_dict(request_body)
+    #card = Card.from_dict(request_body)
+    card.message = request_body["message"]
+    card.likes_count = request_body["likes_count"]
+    card.day_created = request_body["day_created"]
 
     db.session.commit()
     return make_response({"card": card.to_dict()}, 200)
