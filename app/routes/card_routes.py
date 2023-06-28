@@ -54,7 +54,7 @@ def update_card(card_id):
     card = Card.from_dict(request_body)
 
     db.session.commit()
-    return {"card": card.to_dict()}, 200
+    return make_response({"card": card.to_dict()}, 200)
 
 
 @card_bp.route("<card_id>", methods=["DELETE"])
@@ -65,4 +65,3 @@ def delete_card(card_id):
     db.session.commit()
     return {"details": f'Card {card_id} successfully deleted'}, 200
 
-#still to do: test all routes in postman //
