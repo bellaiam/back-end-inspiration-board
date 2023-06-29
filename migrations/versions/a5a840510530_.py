@@ -28,7 +28,7 @@ def upgrade():
     sa.Column('card_id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('message', sa.String(), nullable=True),
     sa.Column('likes_count', sa.Integer(), nullable=True),
-    sa.Column('day_created', sa.DateTime(), nullable=True),
+    sa.Column('date_created', sa.DateTime(), nullable=True),
     sa.Column('board_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['board_id'], ['board.board_id'], ),
     sa.PrimaryKeyConstraint('card_id')

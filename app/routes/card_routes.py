@@ -33,9 +33,9 @@ def get_cards():
 
     sort_direction_date = request.args.get("sort", default="desc")
     if sort_direction_date == "asc":
-        all_cards = Card.query.order_by(Card.day_created.asc())
+        all_cards = Card.query.order_by(Card.date_created.asc())
     else:
-        all_cards = Card.query.order_by(Card.day_created.desc())
+        all_cards = Card.query.order_by(Card.date_created.desc())
 
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200
