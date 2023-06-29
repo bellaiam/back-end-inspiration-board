@@ -40,24 +40,38 @@ def get_cards():
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200
 
-@card_bp.route("<card_id>", methods=["GET"])
+@card_bp.route("/<card_id>", methods=["GET"])
 def get_card_by_id(card_id):
     card = validate_item(Card, card_id)
     return {"card": card.to_dict()}, 200
 
-@card_bp.route("<card_id>", methods=["PUT"])
+@card_bp.route("/<card_id>", methods=["PUT"])
 def update_card(card_id):
     card = validate_item(Card, card_id)
     request_body = request.get_json()
     if not "message" in request_body:
         return make_response({"details": "Invalid data"}, 400)
-    card = Card.from_dict(request_body)
+    #card = Card.from_dict(request_body)
+    card.message = request_body["message"]
+    card.likes_count = request_body["likes_count"]
+    card.date_created = request_body["date_created"]
 
     db.session.commit()
-    return {"card": card.to_dict()}, 200
+    return make_response({"card": card.to_dict()}, 200)
+
+@card_bp.route("/<card_id>/likes_count", methods=["PATCH"])
+def update_card_likes(card_id):
+    card = validate_item(Card, card_id)
+    request_body = request.get_json()
+    if "likes_count" not in request_body:
+        return make_response({"details": "Invalid data"}, 400)
+    card.likes_count = request_body['likes_count']
+
+    db.session.commit()
+    return make_response({"card": card.to_dict()}, 200)
 
 
-@card_bp.route("<card_id>", methods=["DELETE"])
+@card_bp.route("/<card_id>", methods=["DELETE"])
 def delete_card(card_id):
 
     card = validate_item(Card, card_id)
@@ -65,4 +79,3 @@ def delete_card(card_id):
     db.session.commit()
     return {"details": f'Card {card_id} successfully deleted'}, 200
 
-#still to do: test all routes in postman //

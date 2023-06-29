@@ -40,22 +40,23 @@ def get_boards():
 @board_bp.route("/<board_id>", methods=["GET"])
 def get_one_board(board_id):
     board = validate_item(Board, board_id)
-    return make_response({"task": board.to_dict()}, 200)
-
-@board_bp.route("/<board_id>", methods=["PUT"])
-def update_task(board_id):
-    board = validate_item(Board, board_id)
-    
-    request_data = request.get_json()
-
-    board.title = request_data["title"]
-    board.owner = request_data["owner"]
-
-    db.session.commit()
-
     return make_response({"board": board.to_dict()}, 200)
 
-@board_bp.route("<board_id>", methods=["PUT"])
+#UNSURE WHY WE HAVE TWO OF THESE...
+# @board_bp.route("/<board_id>", methods=["PUT"])
+# def update_board(board_id):
+#     board = validate_item(Board, board_id)
+    
+#     request_data = request.get_json()
+
+#     board.title = request_data["title"]
+#     board.owner = request_data["owner"]
+
+#     db.session.commit()
+
+#     return make_response({"board": board.to_dict()}, 200)
+
+@board_bp.route("/<board_id>", methods=["PUT"])
 def update_board(board_id):
     board = validate_item(Board, board_id)
     request_body = request.get_json()
