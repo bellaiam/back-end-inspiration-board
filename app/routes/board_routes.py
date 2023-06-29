@@ -89,19 +89,16 @@ def post_cards_under_board(board_id):
     board = validate_item(Board, board_id)
 
     request_body = request.get_json()
-    try:
-        new_cards_for_board = request_body["card_ids"]
-        cards = []
-        for card_id in new_cards_for_board:
-            cards.append(validate_item(Card, card_id))
+    if "message" not in request_body:
+        return ({"details": "Invalid data"}, 400)
+    new_card = Card.from_dict(request_body)
 
-        board.cards = cards
-        db.session.commit()
+    board.cards.append(new_card)  # Associate the card with the board
+    db.session.add(new_card)
+    db.session.commit()
 
-        return {"board_id": board.board_id, "card_ids": new_cards_for_board}, 200
-    except:
-        return abort(make_response({"details": "Invalid data"}, 400))
-
+    # return {"board_id": board.board_id, "card_id": new_card.card_id, "card": new_card.to_dict()}, 201
+    return {"card": new_card.to_dict()}, 201
 
 @board_bp.route("/<board_id>/cards", methods = ["GET"])
 def get_cards_of_one_board(board_id):
