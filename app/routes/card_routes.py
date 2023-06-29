@@ -51,21 +51,7 @@ def update_card(card_id):
     request_body = request.get_json()
     if not "message" in request_body:
         return make_response({"details": "Invalid data"}, 400)
-    #card = Card.from_dict(request_body)
-    card.message = request_body["message"]
-    card.likes_count = request_body["likes_count"]
-    card.date_created = request_body["date_created"]
-
-    db.session.commit()
-    return make_response({"card": card.to_dict()}, 200)
-
-@card_bp.route("/<card_id>/likes_count", methods=["PATCH"])
-def update_card_likes(card_id):
-    card = validate_item(Card, card_id)
-    request_body = request.get_json()
-    if "likes_count" not in request_body:
-        return make_response({"details": "Invalid data"}, 400)
-    card.likes_count = request_body['likes_count']
+    card = Card.from_dict(request_body)
 
     db.session.commit()
     return make_response({"card": card.to_dict()}, 200)
