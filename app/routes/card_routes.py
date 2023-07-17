@@ -24,18 +24,17 @@ def create_new_card():
 
 @card_bp.route("", methods=["GET"])
 def get_cards():
+    sort_query = request.args.get("sort")
 
-    sort_direction_likes = request.args.get("sort", default="desc")
-    if sort_direction_likes == "asc":
-        all_cards = Card.query.order_by(Card.likes_count.asc())
-    else:
-        all_cards = Card.query.order_by(Card.likes_count.desc())
+    if sort_query is None:
+        all_cards = Card.query.all()
+    elif sort_query == "by_id":
+        all_cards = Card.query.order_by(Card.card_id).all()
+    elif sort_query == "alpha":
+        all_cards = Card.query.order_by(Card.message.desc()).all()
+    elif sort_query == "likes":
+        all_cards = Card.query.order_by(Card.likes_count).all()
 
-    sort_direction_date = request.args.get("sort", default="desc")
-    if sort_direction_date == "asc":
-        all_cards = Card.query.order_by(Card.date_created.asc())
-    else:
-        all_cards = Card.query.order_by(Card.date_created.desc())
 
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200
