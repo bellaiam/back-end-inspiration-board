@@ -24,17 +24,9 @@ def create_new_card():
 
 @card_bp.route("", methods=["GET"])
 def get_cards():
-    sort_query = request.args.get("sort")
+    response = []
 
-    if sort_query is None:
-        all_cards = Card.query.all()
-    elif sort_query == "by_id":
-        all_cards = Card.query.order_by(Card.card_id).all()
-    elif sort_query == "alpha":
-        all_cards = Card.query.order_by(Card.message.desc()).all()
-    elif sort_query == "likes":
-        all_cards = Card.query.order_by(Card.likes_count).all()
-
+    all_cards = Card.query.all()
 
     response = [card.to_dict() for card in all_cards]
     return jsonify(response), 200

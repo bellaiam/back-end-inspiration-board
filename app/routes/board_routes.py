@@ -68,7 +68,7 @@ def update_board(board_id):
     return {"board": board.to_dict()}, 200
 
 @board_bp.route("/<board_id>", methods=["DELETE"])
-def delete_one_task(board_id):
+def delete_one_card(board_id):
     board = validate_item(Board, board_id)
     
     db.session.delete(board)
@@ -104,5 +104,16 @@ def post_cards_under_board(board_id):
 def get_cards_of_one_board(board_id):
     board = validate_item(Board, board_id)
 
-    cards_to_dict = [card.to_dict() for card in board.cards]
+    sort_query = request.args.get("sort")
+
+    if sort_query is None:
+        all_cards = Card.query.filter_by(board_id=board_id).all()
+    elif sort_query == "by_id":
+        all_cards = Card.query.filter_by(board_id=board_id).order_by(Card.card_id).all()
+    elif sort_query == "alpha":
+        all_cards = Card.query.filter_by(board_id=board_id).order_by(Card.message).all()
+    elif sort_query == "likes":
+        all_cards = Card.query.filter_by(board_id=board_id).order_by(Card.likes_count).all()
+
+    cards_to_dict = [card.to_dict() for card in all_cards]
     return jsonify(id=board.board_id, title=board.title, owner=board.owner, cards=cards_to_dict), 200
