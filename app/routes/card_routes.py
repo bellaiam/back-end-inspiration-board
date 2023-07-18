@@ -19,7 +19,7 @@ def create_new_card():
 
     db.session.add(new_card)
     db.session.commit()
-
+    requests.post("https://slack.com/api/chat.postMessage", json={"channel": "task-notifications", "text": f"Someone created a new card {new_card.title}"}, headers={"Authorization": f"Bearer {os.environ.get('SLACK_BOT_TOKEN')}"})
     return make_response({"card": new_card.to_dict()}, 201)
 
 @card_bp.route("", methods=["GET"])
