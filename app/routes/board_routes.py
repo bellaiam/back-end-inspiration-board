@@ -60,7 +60,7 @@ def get_one_board(board_id):
 def update_board(board_id):
     board = validate_item(Board, board_id)
     request_body = request.get_json()
-    if not "message" in request_body:
+    if not "title" in request_body:
         return make_response({"details": "Invalid data"}, 400)
     board = Board.from_dict(request_body)
 
