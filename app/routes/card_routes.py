@@ -16,10 +16,12 @@ def create_new_card():
     if "message" not in request_body:
         return ({"details": "Invalid data"}, 400)
     new_card = Card.from_dict(request_body)
+    # new_card.likes_count=0
+    # new_card.date_created="Sat, 01 Jan 2011 00:00:00 GMT"
 
     db.session.add(new_card)
     db.session.commit()
-    requests.post("https://slack.com/api/chat.postMessage", json={"channel": "task-notifications", "text": f"Someone created a new card {new_card.title}"}, headers={"Authorization": f"Bearer {os.environ.get('SLACK_BOT_TOKEN')}"})
+    requests.post("https://slack.com/api/chat.postMessage", json={"channel": "task-notifications", "text": f"Someone created a new card {new_card.message}"}, headers={"Authorization": f"Bearer {os.environ.get('SLACK_BOT_TOKEN')}"})
     return make_response({"card": new_card.to_dict()}, 201)
 
 @card_bp.route("", methods=["GET"])
