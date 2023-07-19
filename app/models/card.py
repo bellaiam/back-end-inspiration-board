@@ -26,6 +26,6 @@ class Card(db.Model):
     def from_dict(cls, card_data):
         return cls(
             message=card_data["message"],
-            likes_count=card_data["likes_count"],
-            date_created=card_data["date_created"]
+            likes_count=0,
+            date_created=None
         )

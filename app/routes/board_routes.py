@@ -94,6 +94,8 @@ def post_cards_under_board(board_id):
     new_card = Card.from_dict(request_body)
 
     board.cards.append(new_card)  # Associate the card with the board
+    requests.post("https://slack.com/api/chat.postMessage", json={"channel": "task-notifications", "text": f"Someone created a new card {new_card.message}"}, headers={"Authorization": f"Bearer {os.environ.get('SLACK_BOT_TOKEN')}"})
+
     db.session.add(new_card)
     db.session.commit()
 
